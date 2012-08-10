@@ -48,12 +48,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Farseer Physics 3.0 WinPhone">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Physics Helper\Physics Helper Library\WP7.1\Farseer Physics 3.0 WinPhone.DLL</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Spritehand.FarseerHelper">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Physics Helper\Physics Helper Library\WP7.1\Spritehand.FarseerHelper.DLL</HintPath>
+    </Reference>
+    <Reference Include="Spritehand.PhysicsBehaviors">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Physics Helper\Physics Helper Library\WP7.1\Spritehand.PhysicsBehaviors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Interactivity, Version=3.8.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
