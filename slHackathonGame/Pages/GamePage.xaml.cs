@@ -1,28 +1,35 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
+using FarseerPhysics.Dynamics.Joints;
+using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
 using Spritehand.FarseerHelper;
 
 namespace slHackathonGame.Pages
 {
-public partial class GamePage
+    public partial class GamePage
     {
-        
+
         public GamePage()
         {
             InitializeComponent();
             Loaded += GamePageLoaded;
-            
+
         }
 
-        void GamePageLoaded(object sender, RoutedEventArgs e)
+        private void GamePageLoaded(object sender, RoutedEventArgs e)
         {
             //get reference to physics controller
-            var physicsController = LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
+            var physicsController =
+                LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
             //hook up initilized event
             physicsController.Initialized += PhysicsControllerInitialized;
-           
+
         }
 
-        void PhysicsControllerInitialized(object source)
+        private void PhysicsControllerInitialized(object source)
         {
             //get reference to controller
             var physicsController = source as PhysicsControllerMain;
@@ -39,38 +46,101 @@ public partial class GamePage
 
             //get location they clicked on branch
             var branch = physicsController.PhysicsObjects["branch"];
-            branch.ManipulationCompleted += branch_ManipulationCompleted;
+            branch.ManipulationCompleted += delegate(object sender, ManipulationCompletedEventArgs e)
+                                                {
 
 
-            //setup a joint to test physics
+                                                    SetupPulleyJoint(sender,physicsController,e);
+
+                                                };
             
-           // SetupPulleyJoint(physicsController);
+
+      
+
+         
         }
 
-        void BranchCollision(PhysicsSprite source, string collidedWith)
+        private void BranchCollision(PhysicsSprite source, string collidedWith)
         {
             //MessageBox.Show("Hit branch");
         }
 
-        void SetupPulleyJoint(PhysicsControllerMain physMain)
+        private void SetupPulleyJoint(object sender,PhysicsControllerMain physMain,ManipulationCompletedEventArgs e)
         {
+            const float breakpoint = 1000f;
+
+            //translate coordinates relative to screen
+            var touchedObject = sender as PhysicsSprite;
+           //var list = BoundaryHelper.GetPointsForElement(touchedObject.uiElement, e.ManipulationContainer, false);
 
             //get reference to player
             var player = physMain.PhysicsObjects["player"];
-      
 
+
+            //create distance joint between the two
+            var joint = JointFactory.CreateDistanceJoint(physMain.Simulator, player.BodyObject,
+                                                          touchedObject.BodyObject, Vector2.Zero, Vector2.Zero);
+
+            joint.Frequency = 4.0f;
+            joint.DampingRatio = .5f;
+            joint.Breakpoint = breakpoint;
+            joint.CollideConnected = true;
+            joint.Broke += joint_Broke;
+
+
+            //timer
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(33) };
+
+            timer.Tick += delegate
+            {
+                //joint broke
+                if (!joint.Enabled)
+                {
+                    timer.Stop();
+                    physMain.DeleteObject(joint);
+                    return;
+                }
+
+                //reduce distance
+                if (joint.Length <= 0f)
+                {
+
+                    timer.Stop();
+
+                }
+                joint.Length -= .1f;
+
+            };
+            timer.Start();
 
         }
+        
 
-        void branch_ManipulationCompleted(object sender, System.Windows.Input.ManipulationCompletedEventArgs e)
+        
+
+        private void joint_Broke(Joint arg1, float arg2)
         {
-            //translate coordinates relative to screen
-            var physObject = sender as PhysicsSprite;
-            MessageBox.Show(physObject.Position.ToString());
-
-            MessageBox.Show(e.ManipulationOrigin.ToString());
-            
-            
+            arg1.Enabled = false;
         }
+
+        private void BranchManipulationCompleted()
+        {
+   
+
+
+          
+           // MessageBox.Show(list[0].ToString());
+
+           // MessageBox.Show(e.ManipulationOrigin.ToString());
+
+
+       
+
+
+        }
+
+        
+
+
     }
 }
