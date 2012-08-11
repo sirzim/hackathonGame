@@ -6,8 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:pb="clr-namespace:Spritehand.PhysicsBehaviors;assembly=Spritehand.PhysicsBehaviors"
-    xmlns:UserControls="clr-namespace:slHackathonGame.UserControls"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     x:Class="slHackathonGame.Pages.GamePage"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -18,18 +16,19 @@
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Canvas Width="480" Height="799" x:Name="LayoutRoot" Background="CornflowerBlue" >
-        <toolkit:GestureService.GestureListener>
-            <toolkit:GestureListener DragDelta="GestureListenerDragDelta" DragStarted="GestureListenerDragStarted" DragCompleted="GestureListenerDragCompleted" />
-        </toolkit:GestureService.GestureListener>
-
         <!-- clip canvas at 480x800-->
         <Canvas.Clip>
             <RectangleGeometry Rect="0,0,480,800"/>
         </Canvas.Clip>
     	<i:Interaction.Behaviors>
-    		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld"  />
+    		<pb:PhysicsControllerBehavior  x:Name="PhysHelperWorld"  DebugMode="False" />
     	</i:Interaction.Behaviors>
-    	<Rectangle x:Name="ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="800" Width="480">
+
+   
+    
+     
+
+        <Rectangle x:Name="ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="800" Width="480">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="Ground"/>
     		</i:Interaction.Behaviors>
@@ -44,42 +43,26 @@
     			<pb:PhysicsObjectBehavior IsStatic="True"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
+     
     	<Rectangle x:Name="ceiling" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="-29" Width="480">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="Ceiling"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Image x:Name="player" Height="46" Width="100"  Stretch="Uniform"  Source="/Assets/Lizard.png" Canvas.Left="263" Canvas.Top="725">
+        <Image x:Name="player" IsHitTestVisible="False" Height="107" Width="145"  Stretch="None"  Source="/Assets/Spleegle_sitting_left.png" Canvas.Left="263" Canvas.Top="725">
            
             <i:Interaction.Behaviors>
             	<pb:PhysicsObjectBehavior Mass="2" RestitutionCoefficient="0.1" MomentOfIntertia="10000" BoundaryElement="player"/>
             </i:Interaction.Behaviors>
           
-
         </Image>
+        <Ellipse x:Name="target" IsHitTestVisible="False" Opacity=".8" StrokeDashArray="2, 2"  Height="600" Width="600" Stroke="Transparent"  StrokeThickness="5" Canvas.Left="-7" Canvas.Top="-61" />
         
-        <UserControls:TestUserControl Height="25" Width="200" Canvas.Left="280" Canvas.Top="260" />
         
-        <Rectangle x:Name="branch" Fill="#FF745B18" Stroke="Black" Width="200" Height="25" Canvas.Left="280" Canvas.Top="382">
-            <i:Interaction.Behaviors>
-                <pb:PhysicsObjectBehavior IsStatic="True" Mass="1" ForceRectangle="True" BoundaryElement="branch"/>
-            </i:Interaction.Behaviors>
-        </Rectangle>
-        <Rectangle x:Name="bbox" Height="25" Width="200" Stroke="#FFFB0202" StrokeThickness="2" Canvas.Left="280" Canvas.Top="382">
-        	<i:Interaction.Behaviors>
-        		<pb:PhysicsObjectBehavior IsSensor="True" BoundaryElement="bbox" IsStatic="True"/>
-        	</i:Interaction.Behaviors>
-        </Rectangle>
-        <Rectangle x:Name="branch1" Fill="#FF745B18" Stroke="Black" Width="200" Height="25" Canvas.Top="306" Canvas.Left="-4">
-        	<i:Interaction.Behaviors>
-        		<pb:PhysicsObjectBehavior IsStatic="True" Mass="1" ForceRectangle="True" BoundaryElement="branch"/>
-        	</i:Interaction.Behaviors>
-        </Rectangle>
-        <Rectangle x:Name="bbox1" Height="25" Width="200" Stroke="#FFFB0202" StrokeThickness="2" Canvas.Top="306" Canvas.Left="-4">
-        	<i:Interaction.Behaviors>
-        		<pb:PhysicsObjectBehavior IsSensor="True" BoundaryElement="bbox" IsStatic="True"/>
-        	</i:Interaction.Behaviors>
-        </Rectangle>
+        
+
+        
+
     </Canvas>
 
 </phone:PhoneApplicationPage>

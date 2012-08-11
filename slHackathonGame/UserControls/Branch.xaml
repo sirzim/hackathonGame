@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="slHackathonGame.UserControls.TestUserControl"
+﻿<UserControl x:Class="slHackathonGame.UserControls.Branch"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,11 +11,11 @@
     d:DesignHeight="480" d:DesignWidth="480">
 
     <i:Interaction.Behaviors>
-        <pb:PhysicsObjectBehavior IsStatic="True" Mass="1" ForceRectangle="True"  BoundaryElement="branch"/>
+        <pb:PhysicsObjectBehavior IsStatic="True"  Mass="0"  BoundaryElement="branch1"/>
     </i:Interaction.Behaviors>
-    
-    <Rectangle x:Name="branch" Fill="#FF745B18" Stroke="Black" >
-          
+    <Grid x:Name="LayoutRoot">
+        <Rectangle x:Name="branch1"  Fill="#FF745B18" Stroke="Black" >
+ 
         </Rectangle>
-  
+    </Grid >
 </UserControl>
