@@ -6,7 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" xmlns:pb="clr-namespace:Spritehand.PhysicsBehaviors;assembly=Spritehand.PhysicsBehaviors"
-    xmlns:UserControls="clr-namespace:slHackathonGame.UserControls" x:Class="slHackathonGame.Pages.GamePage"
+    xmlns:UserControls="clr-namespace:slHackathonGame.UserControls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    x:Class="slHackathonGame.Pages.GamePage"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -15,15 +17,17 @@
     shell:SystemTray.IsVisible="false">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Canvas Width="480" Height="799" x:Name="LayoutRoot" Background="CornflowerBlue" ManipulationCompleted="LayoutRoot_ManipulationCompleted">
-       
-        
+    <Canvas Width="480" Height="799" x:Name="LayoutRoot" Background="CornflowerBlue" >
+        <toolkit:GestureService.GestureListener>
+            <toolkit:GestureListener DragDelta="GestureListenerDragDelta" DragStarted="GestureListenerDragStarted" DragCompleted="GestureListenerDragCompleted" />
+        </toolkit:GestureService.GestureListener>
+
         <!-- clip canvas at 480x800-->
         <Canvas.Clip>
             <RectangleGeometry Rect="0,0,480,800"/>
         </Canvas.Clip>
     	<i:Interaction.Behaviors>
-    		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld" MousePickEnabled="True" />
+    		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld"  />
     	</i:Interaction.Behaviors>
     	<Rectangle x:Name="ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="800" Width="480">
     		<i:Interaction.Behaviors>
@@ -49,8 +53,10 @@
            
             <i:Interaction.Behaviors>
             	<pb:PhysicsObjectBehavior Mass="2" RestitutionCoefficient="0.1" MomentOfIntertia="10000" BoundaryElement="player"/>
-    		</i:Interaction.Behaviors>
-    	</Image>
+            </i:Interaction.Behaviors>
+          
+
+        </Image>
         
         <UserControls:TestUserControl Height="25" Width="200" Canvas.Left="280" Canvas.Top="260" />
         

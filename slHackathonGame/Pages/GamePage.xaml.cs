@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interactivity;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using FarseerPhysics.Dynamics.Joints;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Spritehand.FarseerHelper;
+using Spritehand.PhysicsBehaviors;
 using Point = Microsoft.Xna.Framework.Point;
 
 namespace slHackathonGame.Pages
@@ -15,7 +20,8 @@ namespace slHackathonGame.Pages
     {
         private readonly List<DistanceJoint> _joints;
         private PhysicsSprite _player;
-
+        private System.Windows.Point _startDrag;
+        private Ellipse _finger;
 
         public GamePage()
         {
@@ -33,21 +39,14 @@ namespace slHackathonGame.Pages
                 LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
             //hook up initilized event
             physicsController.Initialized += PhysicsControllerInitialized;
-          
+
+
+           
         }
 
-        void _player_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        { 
-            
-        var physicsController =
-                LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
-            SetupReleaseTarget(sender,physicsController,e);
-        }
+    
 
-        void _player_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
-        {
-          
-        }
+       
 
         private void PhysicsControllerInitialized(object source)
         {
@@ -56,8 +55,8 @@ namespace slHackathonGame.Pages
 
 
             _player = physicsController.PhysicsObjects["player"];
-            _player.ManipulationStarted += _player_ManipulationStarted;
-         //   _player.ManipulationCompleted += _player_ManipulationCompleted;
+            _player.Collision += _player_Collision;
+     
 
             //get reference to branch
             if (physicsController != null)
@@ -75,6 +74,11 @@ namespace slHackathonGame.Pages
           
             branch1.ManipulationCompleted += (sender, e) => SetupDistanceJoint(sender, physicsController, e);
             branch.ManipulationCompleted += (sender, e) => SetupDistanceJoint(sender, physicsController, e);
+        }
+
+        void _player_Collision(PhysicsSprite source, string collidedWith)
+        {
+            MessageBox.Show("Show body touched the player");
         }
 
         private void BranchCollision(PhysicsSprite source, string collidedWith)
@@ -146,7 +150,6 @@ namespace slHackathonGame.Pages
             };
             timer.Start();
         }
-
         private void SetupDistanceJoint(object sender, PhysicsControllerMain physMain, ManipulationCompletedEventArgs e)
         {
 
@@ -207,32 +210,77 @@ namespace slHackathonGame.Pages
                               };
             timer.Start();
         }
-
-
         private void joint_Broke(Joint arg1, float arg2)
         {
             arg1.Enabled = false;
         }
 
-        private void BranchManipulationCompleted()
-        {
-            // MessageBox.Show(list[0].ToString());
+       
 
-            // MessageBox.Show(e.ManipulationOrigin.ToString());
+
+        private void GestureListenerDragStarted(object sender, Microsoft.Phone.Controls.DragStartedGestureEventArgs e)
+        {
+            //get drag start
+            _startDrag = e.GetPosition(LayoutRoot);
+             var physicsController =
+             LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
+
+            if(_finger == null)
+
+            {
+                //create finger ellipse
+             var _physicsController = LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
+             _finger = new Ellipse { Name = "finger", Stroke = new SolidColorBrush(Colors.Red), Width = 50, Height = 50,StrokeThickness = 2};
+             var behaviorCollection = Interaction.GetBehaviors(_finger);
+             behaviorCollection.Add(new PhysicsObjectBehavior() { BoundaryElement = "finger", IsBullet = true });
+             _physicsController.AddPhysicsBody(_finger.GetValue(PhysicsObjectMain.PhysicsObjectProperty) as PhysicsObjectMain);
+              
+              
+            }
+            
+
+
+
+  
+           
+           
+        
         }
 
-        private void LayoutRoot_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+        private void GestureListenerDragCompleted(object sender, Microsoft.Phone.Controls.DragCompletedGestureEventArgs e)
         {
-           
+            if(_finger != null)
+            {
+                _finger.Stroke = new SolidColorBrush(Colors.Transparent);
+            }
+            return;
             var physicsController =
-        LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
+             LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
 
-            MessageBox.Show(
+           /* MessageBox.Show(
                 String.Format(
-                    "Silverlight Touchpoint: {0}\n Farseer Vector:{1}\n Farseer ScreenTopLeft: {2}\nFarseer ScreenBottomRight:{3}\nFarseer WorldTopLeft{4}\nFarseer WorldBottomRight{5}",e.ManipulationOrigin.ToString(),physicsController.ScreenToWorld(e.ManipulationOrigin).ToString(),BoundaryHelperBox2d.ScreenTopLeft,BoundaryHelperBox2d.ScreenBottomRight,BoundaryHelperBox2d.WorldTopLeft,BoundaryHelperBox2d.WorldBottomRight));
+                    "Silverlight Touchpoint: {0}\n Farseer Vector:{1}\n Farseer ScreenTopLeft: {2}\nFarseer ScreenBottomRight:{3}\nFarseer WorldTopLeft{4}\nFarseer WorldBottomRight{5}", e.ManipulationOrigin.ToString(), physicsController.ScreenToWorld(e).ToString(), BoundaryHelperBox2d.ScreenTopLeft, BoundaryHelperBox2d.ScreenBottomRight, BoundaryHelperBox2d.WorldTopLeft, BoundaryHelperBox2d.WorldBottomRight));*/
 
+
+            var pt = new System.Windows.Point((int)e.GetPosition(LayoutRoot).X, (int)e.GetPosition(LayoutRoot).Y);
+
+            var letGoVector = physicsController.ScreenToWorld(pt);
+            MessageBox.Show(letGoVector.ToString());
 
             e.Handled = true;
+        }
+
+        private void GestureListenerDragDelta(object sender, Microsoft.Phone.Controls.DragDeltaGestureEventArgs e)
+        {
+
+            //move finger
+            var _physicsController = LayoutRoot.GetValue(PhysicsControllerMain.PhysicsControllerProperty) as PhysicsControllerMain;
+            var finger = _physicsController.PhysicsObjects["finger"];
+
+            finger.Position = new Vector2((int)e.GetPosition(LayoutRoot).X, (int)e.GetPosition(LayoutRoot).Y);
+
+
+
         }
     }
 }
