@@ -23,32 +23,42 @@
     	<i:Interaction.Behaviors>
     		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld" MousePickEnabled="True"/>
     	</i:Interaction.Behaviors>
-    	<Rectangle x:Name="Ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="775" Width="480">
+    	<Rectangle x:Name="ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="775" Width="480">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="Ground"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Rectangle x:Name="RightWall" Fill="#FF03562E" Height="800" Canvas.Left="484" Stroke="Black" Width="25">
+    	<Rectangle x:Name="rightWall" Fill="#FF03562E" Height="800" Canvas.Left="484" Stroke="Black" Width="25">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="RightWall"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Rectangle x:Name="LeftWall" Fill="#FF03562E" Height="800" Canvas.Left="-29" Stroke="Black" Width="25">
+    	<Rectangle x:Name="leftWall" Fill="#FF03562E" Height="800" Canvas.Left="-29" Stroke="Black" Width="25">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Rectangle x:Name="Ceiling" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="-29" Width="480">
+    	<Rectangle x:Name="ceiling" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="-29" Width="480">
     		<i:Interaction.Behaviors>
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="Ceiling"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Image x:Name="Player" Height="46" Width="100"  Stretch="Uniform"  Source="/Assets/Lizard.png">
+    	<Image x:Name="player" Height="46" Width="100"  Stretch="Uniform"  Source="/Assets/Lizard.png" Canvas.Left="63" Canvas.Top="117">
            
             <i:Interaction.Behaviors>
-    			<pb:PhysicsObjectBehavior Mass="1" RestitutionCoefficient="0.1" MomentOfIntertia="1" IsBullet="True"/>
+            	<pb:PhysicsObjectBehavior Mass="1" RestitutionCoefficient="0.1" MomentOfIntertia="10" IsBullet="True" BoundaryElement="player"/>
     		</i:Interaction.Behaviors>
     	</Image>
+        <Rectangle x:Name="branch" Fill="#FF745B18" Stroke="Black" Width="200" Height="25" Canvas.Left="280" Canvas.Top="382">
+            <i:Interaction.Behaviors>
+                <pb:PhysicsObjectBehavior IsStatic="True" Mass="1" ForceRectangle="True" BoundaryElement="branch"/>
+            </i:Interaction.Behaviors>
+        </Rectangle>
+        <Rectangle x:Name="bbox" Height="25" Width="200" Stroke="#FFFB0202" StrokeThickness="2" Canvas.Left="280" Canvas.Top="382">
+        	<i:Interaction.Behaviors>
+        		<pb:PhysicsObjectBehavior IsSensor="True" BoundaryElement="bbox" IsStatic="True"/>
+        	</i:Interaction.Behaviors>
+        </Rectangle>
     </Canvas>
 
 </phone:PhoneApplicationPage>
