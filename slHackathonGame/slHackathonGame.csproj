@@ -53,6 +53,7 @@
     </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Xna.Framework" />
     <Reference Include="Spritehand.FarseerHelper">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Physics Helper\Physics Helper Library\WP7.1\Spritehand.FarseerHelper.DLL</HintPath>
     </Reference>
