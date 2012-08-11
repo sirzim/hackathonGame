@@ -18,6 +18,8 @@ namespace slHackathonGame.Pages
         private void PlayGame(object sender, System.Windows.RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/GamePage.xaml", UriKind.Relative));
+
+            
         }
     }
 }

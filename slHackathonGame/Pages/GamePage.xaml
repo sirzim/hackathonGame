@@ -21,7 +21,7 @@
             <RectangleGeometry Rect="0,0,480,800"/>
         </Canvas.Clip>
     	<i:Interaction.Behaviors>
-    		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld" MousePickEnabled="True"/>
+    		<pb:PhysicsControllerBehavior x:Name="PhysHelperWorld" />
     	</i:Interaction.Behaviors>
     	<Rectangle x:Name="ground" Fill="#FF03562E" Height="25" Stroke="Black" Canvas.Top="775" Width="480">
     		<i:Interaction.Behaviors>
@@ -43,10 +43,10 @@
     			<pb:PhysicsObjectBehavior IsStatic="True" BoundaryElement="Ceiling"/>
     		</i:Interaction.Behaviors>
     	</Rectangle>
-    	<Image x:Name="player" Height="46" Width="100"  Stretch="Uniform"  Source="/Assets/Lizard.png" Canvas.Left="63" Canvas.Top="117">
+    	<Image x:Name="player" Height="46" Width="100"  Stretch="Uniform"  Source="/Assets/Lizard.png" Canvas.Left="263" Canvas.Top="725">
            
             <i:Interaction.Behaviors>
-            	<pb:PhysicsObjectBehavior Mass="1" RestitutionCoefficient="0.1" MomentOfIntertia="20" IsBullet="True" BoundaryElement="player"/>
+            	<pb:PhysicsObjectBehavior Mass="2" RestitutionCoefficient="0.1" MomentOfIntertia="10000" BoundaryElement="player"/>
     		</i:Interaction.Behaviors>
     	</Image>
         
@@ -58,6 +58,16 @@
             </i:Interaction.Behaviors>
         </Rectangle>
         <Rectangle x:Name="bbox" Height="25" Width="200" Stroke="#FFFB0202" StrokeThickness="2" Canvas.Left="280" Canvas.Top="382">
+        	<i:Interaction.Behaviors>
+        		<pb:PhysicsObjectBehavior IsSensor="True" BoundaryElement="bbox" IsStatic="True"/>
+        	</i:Interaction.Behaviors>
+        </Rectangle>
+        <Rectangle x:Name="branch1" Fill="#FF745B18" Stroke="Black" Width="200" Height="25" Canvas.Top="306" Canvas.Left="-4">
+        	<i:Interaction.Behaviors>
+        		<pb:PhysicsObjectBehavior IsStatic="True" Mass="1" ForceRectangle="True" BoundaryElement="branch"/>
+        	</i:Interaction.Behaviors>
+        </Rectangle>
+        <Rectangle x:Name="bbox1" Height="25" Width="200" Stroke="#FFFB0202" StrokeThickness="2" Canvas.Top="306" Canvas.Left="-4">
         	<i:Interaction.Behaviors>
         		<pb:PhysicsObjectBehavior IsSensor="True" BoundaryElement="bbox" IsStatic="True"/>
         	</i:Interaction.Behaviors>
